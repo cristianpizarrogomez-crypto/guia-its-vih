@@ -1,0 +1,751 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Orientador Digital: Salud Sexual, ITS y VIH</title>
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Google Fonts: Inter -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['Inter', 'sans-serif'],
+          },
+          colors: {
+            brand: {
+              deep: '#0f2942',      // Azul profundo calmado
+              mid: '#1e4976',       // Azul medio
+              teal: '#0d9488',      // Verde turquesa/menta profesional
+              mint: '#ccfbf1',      // Menta suave
+              surface: '#f8fafc',   // Fondo claro
+            }
+          }
+        }
+      }
+    };
+  </script>
+</head>
+<body class="bg-slate-50 text-slate-800 font-sans antialiased min-h-screen flex flex-col justify-between selection:bg-teal-100 selection:text-teal-900">
+
+  <!-- Barra Superior Minimalista y Segura -->
+  <header class="bg-white border-b border-slate-200/80 sticky top-0 z-20">
+    <div class="max-w-3xl mx-auto px-4 sm:px-6 h-16 flex items-center justify-between">
+      <div class="flex items-center gap-3">
+        <div class="w-9 h-9 rounded-xl bg-brand-deep text-white flex items-center justify-center shadow-sm">
+          <!-- Icono de escudo/salud SVG -->
+          <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 text-teal-300" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+            <path d="M12 8v8"/>
+            <path d="M8 12h8"/>
+          </svg>
+        </div>
+        <div>
+          <h1 class="text-base sm:text-lg font-bold text-brand-deep leading-tight">Guía Interactiva ITS & VIH</h1>
+          <p class="text-xs text-slate-500 hidden sm:block">Orientación anónima, confidencial y basada en evidencia</p>
+        </div>
+      </div>
+
+      <!-- Indicador de Privacidad + Botón Reiniciar -->
+      <div class="flex items-center gap-2 sm:gap-3">
+        <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-medium bg-teal-50 text-teal-800 border border-teal-200/70" title="No se guardan ni envían datos personales">
+          <span class="w-2 h-2 rounded-full bg-teal-500 animate-pulse"></span>
+          100% Anónimo
+        </span>
+        <button id="btn-header-restart" onclick="resetApp()" class="hidden text-xs sm:text-sm font-medium text-slate-600 hover:text-brand-deep px-3 py-1.5 rounded-lg hover:bg-slate-100 transition-colors cursor-pointer">
+          Reiniciar
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Contenedor Principal -->
+  <main class="flex-grow flex items-center justify-center px-4 py-8 sm:py-12">
+    <div class="w-full max-w-2xl">
+
+      <!-- PANTALLA 0: AVISO INICIAL DE CONFIDENCIALIDAD Y CARÁCTER EDUCATIVO -->
+      <section id="welcome-screen" class="bg-white rounded-3xl shadow-sm border border-slate-200/90 p-6 sm:p-10 transition-all">
+        <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-blue-50 text-brand-deep text-xs font-semibold mb-5">
+          <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 text-teal-600" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4"/><path d="M12 8h.01"/></svg>
+          Antes de comenzar
+        </div>
+
+        <h2 class="text-2xl sm:text-3xl font-bold text-brand-deep tracking-tight mb-4">
+          Información clara, sin juicios y a tu propio ritmo
+        </h2>
+
+        <p class="text-slate-600 text-base leading-relaxed mb-6">
+          Este asistente interactivo te guiará mediante <strong>10 preguntas sencillas de Sí o No</strong>, entregándote cápsulas educativas inmediatas tras cada respuesta y un resumen personalizado al finalizar.
+        </p>
+
+        <!-- Cuadro de Aviso Médico y Privacidad -->
+        <div class="bg-slate-50 border border-slate-200 rounded-2xl p-4 sm:p-5 mb-8 space-y-3">
+          <div class="flex items-start gap-3">
+            <div class="mt-0.5 text-teal-600 shrink-0">
+              <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+            </div>
+            <p class="text-sm text-slate-700">
+              <strong class="text-brand-deep">Privacidad total:</strong> No solicitamos tu nombre, correo ni ubicación. Todo ocurre localmente en tu navegador y se borra al cerrar la página.
+            </p>
+          </div>
+          <div class="flex items-start gap-3">
+            <div class="mt-0.5 text-amber-600 shrink-0">
+              <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+            </div>
+            <p class="text-sm text-slate-700">
+              <strong class="text-brand-deep">Carácter educativo:</strong> Esta herramienta es estrictamente orientativa y <strong>no reemplaza una consulta médica</strong> ni un examen de laboratorio.
+            </p>
+          </div>
+        </div>
+
+        <button onclick="startAgent()" class="w-full py-4 px-6 rounded-2xl bg-brand-deep hover:bg-brand-mid text-white font-semibold text-base sm:text-lg shadow-sm hover:shadow transition-all flex items-center justify-center gap-2 cursor-pointer">
+          <span>Comenzar orientación</span>
+          <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+        </button>
+      </section>
+
+      <!-- PANTALLA 1: FLUJO INTERACTIVO DE PREGUNTAS (SÍ / NO) -->
+      <section id="agent-screen" class="hidden space-y-5">
+        
+        <!-- Barra de Progreso y Bloque Temático -->
+        <div class="bg-white rounded-2xl border border-slate-200/90 p-4 sm:px-6 shadow-sm">
+          <div class="flex flex-wrap items-center justify-between gap-2 mb-2.5">
+            <span id="block-badge" class="inline-flex items-center gap-1.5 text-xs font-bold uppercase tracking-wider text-teal-700 bg-teal-50 px-2.5 py-1 rounded-lg">
+              Bloque 1: Triaje de Urgencia
+            </span>
+            <span id="step-counter" class="text-xs font-medium text-slate-500">
+              Paso 1
+            </span>
+          </div>
+          <!-- Barra visual -->
+          <div class="w-full h-2 bg-slate-100 rounded-full overflow-hidden">
+            <div id="progress-bar" class="h-full bg-teal-600 rounded-full transition-all duration-300" style="width: 15%;"></div>
+          </div>
+        </div>
+
+        <!-- Tarjeta Principal de Pregunta o Resultado -->
+        <div id="card-container" class="bg-white rounded-3xl shadow-sm border border-slate-200/90 p-6 sm:p-10 transition-all">
+          <!-- El contenido dinámico se renderiza aquí vía JS -->
+        </div>
+
+        <!-- Controles de Navegación Inferior (Retroceder / Reiniciar) -->
+        <div class="flex items-center justify-between px-2">
+          <button id="btn-back" onclick="goBack()" class="inline-flex items-center gap-1.5 text-sm font-medium text-slate-600 hover:text-brand-deep py-2 px-3 rounded-xl hover:bg-white transition-colors disabled:opacity-40 disabled:pointer-events-none cursor-pointer">
+            <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/></svg>
+            <span>Pregunta anterior</span>
+          </button>
+
+          <button onclick="resetApp()" class="inline-flex items-center gap-1.5 text-sm font-medium text-slate-500 hover:text-rose-700 py-2 px-3 rounded-xl hover:bg-white transition-colors cursor-pointer">
+            <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="1 4 1 10 7 10"/><path d="M3.51 15a9 9 0 1 0 2.13-9.36L1 10"/></svg>
+            <span>Volver al inicio</span>
+          </button>
+        </div>
+
+      </section>
+
+    </div>
+  </main>
+
+  <!-- Pie de Página Informativo -->
+  <footer class="border-t border-slate-200/80 bg-white py-5 px-4 text-center">
+    <p class="text-xs text-slate-500 max-w-2xl mx-auto leading-relaxed">
+      Información alineada con recomendaciones de la Organización Mundial de la Salud (OMS) y OPS. Ante cualquier duda clínica o emergencia, acude a tu centro de salud más cercano.
+    </p>
+  </footer>
+
+  <!-- LÓGICA DEL ÁRBOL DE DECISIÓN EN JAVASCRIPT -->
+  <script>
+    /**
+     * Cuestionario secuencial de 10 preguntas con retroalimentación educativa
+     * inmediata tras cada elección (Sí / No) y generación dinámica del resumen final.
+     */
+    const questionsList = [
+      {
+        id: 'q1_pep_72h',
+        block: 'Bloque 1 · Triaje de Urgencia (1/10)',
+        question: '1. ¿Tuviste una relación sexual sin preservativo (o este se rompió o deslizó) en las últimas 72 horas?',
+        context: 'Esta pregunta identifica si estás dentro del plazo de emergencia para evitar una infección por VIH tras una exposición reciente.',
+        urgentAlert: true,
+        feedback: {
+          yes: {
+            tone: 'urgent',
+            badge: '⚠️ Acción Prioritaria (< 72 horas)',
+            title: 'Estás a tiempo de solicitar la PEP (Profilaxis Post-Exposición)',
+            text: 'La PEP es un tratamiento antirretroviral de emergencia que previene el VIH si se inicia antes de que pasen 72 horas (3 días) desde la exposición. Acude hoy mismo a un servicio de urgencias o centro de salud.'
+          },
+          no: {
+            tone: 'neutral',
+            badge: '✓ Sin urgencia inmediata de PEP',
+            title: 'Continuamos con la evaluación preventiva',
+            text: 'Como no hubo exposición sin protección en las últimas 72 horas, no requieres profilaxis de emergencia. Revisemos ahora si existen síntomas o antecedentes recientes.'
+          }
+        }
+      },
+      {
+        id: 'q2_sintomas_urinarios',
+        block: 'Bloque 2 · Evaluación de Síntomas (2/10)',
+        question: '2. ¿Presentas actualmente ardor al orinar, secreciones inusuales (flujo distinto), picazón intensa o dolor pélvico?',
+        context: 'Infecciones bacterianas muy frecuentes como la clamidia o la gonorrea suelen manifestarse primero con molestias al orinar o cambios en las secreciones.',
+        feedback: {
+          yes: {
+            tone: 'warning',
+            badge: 'Atención Clínica Recomendada',
+            title: 'Estos signos requieren evaluación médica sin automedicación',
+            text: 'El ardor o las secreciones son síntomas típicos de infecciones tratables con antibióticos (como clamidia, gonorrea o tricomoniasis). Evita tomar remedios por tu cuenta, ya que pueden ocultar la infección y dificultar el diagnóstico.'
+          },
+          no: {
+            tone: 'info',
+            badge: 'Dato clave sobre ITS',
+            title: 'La mayoría de las ITS no presentan síntomas visibles',
+            text: 'No tener molestias es una buena señal, pero recuerda que infecciones como la clamidia, el VIH o la sífilis pueden cursar de forma silenciosa durante meses sin dar señales externas.'
+          }
+        }
+      },
+      {
+        id: 'q3_sintomas_lesiones',
+        block: 'Bloque 2 · Evaluación de Síntomas (3/10)',
+        question: '3. ¿Has notado alguna llaga (úlcera), ampolla, bulto o verruga en la zona genital, anal o en la boca (incluso si no duele)?',
+        context: 'Algunas infecciones provocan lesiones en piel o mucosas que pasan desapercibidas porque muchas veces son completamente indoloras.',
+        feedback: {
+          yes: {
+            tone: 'warning',
+            badge: 'Evaluación Dermatológica / Salud Sexual',
+            title: 'No manipules las lesiones y consulta a un profesional',
+            text: 'Una llaga que no duele puede ser el primer signo de Sífilis; las ampollas dolorosas suelen asociarse a Herpes simple y las verrugas al VPH. Evita cremas de venta libre y solicita un examen médico.'
+          },
+          no: {
+            tone: 'neutral',
+            badge: 'Sin lesiones visibles reportadas',
+            title: 'Recuerda el contacto piel con piel',
+            text: 'Infecciones como el VPH, el herpes y la sífilis se transmiten por contacto directo con piel o mucosas, incluso en zonas que el preservativo no alcanza a cubrir por completo.'
+          }
+        }
+      },
+      {
+        id: 'q4_exposicion_3m',
+        block: 'Bloque 3 · Prácticas y Período Ventana (4/10)',
+        question: '4. ¿Has tenido relaciones sexuales (vaginales, anales u orales) sin preservativo en los últimos 3 meses?',
+        context: 'Conocer el tiempo transcurrido desde una relación sin protección permite elegir el momento exacto para que un examen sea confiable.',
+        feedback: {
+          yes: {
+            tone: 'info',
+            badge: 'Recomendación de Chequeo',
+            title: 'Un tamizaje de rutina es la mejor decisión',
+            text: 'Haber tenido relaciones sin barrera en los últimos 90 días es motivo suficiente para realizarse un chequeo preventivo de VIH, sífilis, clamidia y gonorrea, incluso sin tener síntomas.'
+          },
+          no: {
+            tone: 'safe',
+            badge: 'Buen hábito de cuidado',
+            title: 'Mantener el uso constante del preservativo reduce riesgos',
+            text: 'El uso correcto y sistemático del preservativo externo o interno sigue siendo una de las herramientas más eficaces para prevenir tanto el VIH como la mayoría de las ITS.'
+          }
+        }
+      },
+      {
+        id: 'q5_test_12m',
+        block: 'Bloque 3 · Prácticas y Período Ventana (5/10)',
+        question: '5. ¿Te has realizado una prueba de VIH o de otras ITS en los últimos 12 meses?',
+        context: 'Las guías internacionales de la OMS recomiendan que toda persona sexualmente activa se realice al menos un chequeo anual.',
+        feedback: {
+          yes: {
+            tone: 'safe',
+            badge: 'Excelente práctica preventiva',
+            title: 'Conocer tu estado serológico te empodera',
+            text: 'Hacerte pruebas periódicas es un hábito saludable. Si tienes múltiples parejas sexuales, los especialistas sugieren repetir el chequeo cada 3 a 6 meses.'
+          },
+          no: {
+            tone: 'info',
+            badge: 'Oportunidad de chequeo',
+            title: 'Es un buen momento para planificar un test rápido',
+            text: 'Hoy existen pruebas rápidas y autotests de VIH con una gota de sangre o saliva que entregan resultados confidenciales en 15 a 20 minutos en centros de salud públicos y comunitarios.'
+          }
+        }
+      },
+      {
+        id: 'q6_periodo_ventana',
+        block: 'Bloque 3 · Prácticas y Período Ventana (6/10)',
+        question: '6. ¿Sabías que existe un "período ventana" después de una exposición antes de que una prueba detecte el VIH?',
+        context: 'Hacerse un examen demasiado pronto tras una exposición puede arrojar un resultado falso negativo.',
+        feedback: {
+          yes: {
+            tone: 'safe',
+            badge: 'Información confirmada',
+            title: 'Las pruebas de 4ª generación acortan ese tiempo',
+            text: 'Exacto: las pruebas de laboratorio de 4ª generación detectan antígenos y anticuerpos desde los 15-20 días (con certeza definitiva a los 45 días), mientras que algunas pruebas rápidas de 3ª generación requieren hasta 90 días.'
+          },
+          no: {
+            tone: 'info',
+            badge: 'Concepto clave de diagnóstico',
+            title: '¿Cómo funciona el período ventana?',
+            text: 'Es el tiempo que tarda el cuerpo en producir suficientes anticuerpos o antígenos detectables. Para pruebas de 4ª generación es de 3 a 6 semanas; si te haces el test antes de ese plazo, conviene repetirlo al cumplirse el tiempo.'
+          }
+        }
+      },
+      {
+        id: 'q7_vacuna_vph',
+        block: 'Bloque 4 · Inmunización Preventiva (7/10)',
+        question: '7. ¿Cuentas con tu esquema de vacunación contra el VPH (Virus del Papiloma Humano) completo?',
+        context: 'El VPH es la ITS más común en el mundo y está asociado a verrugas genitales y distintos tipos de cáncer (cuello uterino, ano, garganta).',
+        feedback: {
+          yes: {
+            tone: 'safe',
+            badge: 'Protección activa frente a VPH',
+            title: 'Mantén tus controles periódicos al día',
+            text: 'La vacuna protege contra los tipos de VPH de mayor riesgo. Aun estando vacunado/a, las personas con cuello uterino deben continuar con sus controles preventivos (PAP o test de VPH) según su edad.'
+          },
+          no: {
+            tone: 'info',
+            badge: 'Prevención disponible',
+            title: 'Consulta sobre la vacuna contra el VPH en tu centro de salud',
+            text: 'La vacuna contra el VPH se recomienda principalmente en la adolescencia, pero también ofrece beneficios importantes en jóvenes y adultos (especialmente hasta los 26-45 años según criterio médico).'
+          }
+        }
+      },
+      {
+        id: 'q8_vacuna_hepatitis',
+        block: 'Bloque 4 · Inmunización Preventiva (8/10)',
+        question: '8. ¿Estás vacunado/a contra la Hepatitis B (y Hepatitis A si corresponde)?',
+        context: 'Tanto la Hepatitis B como la Hepatitis A pueden transmitirse durante las relaciones sexuales y afectan directamente al hígado.',
+        feedback: {
+          yes: {
+            tone: 'safe',
+            badge: 'Inmunización hepática al día',
+            title: 'La vacuna contra la Hepatitis B es altamente eficaz',
+            text: 'El esquema completo (generalmente 3 dosis) brinda protección duradera frente a la Hepatitis B, un virus que se transmite por fluidos sexuales y sangre con mucha facilidad.'
+          },
+          no: {
+            tone: 'info',
+            badge: 'Vacunas seguras y accesibles',
+            title: 'Puedes solicitar la vacuna de Hepatitis B sin costo en salud pública',
+            text: 'Si no recuerdas haber recibido la vacuna contra la Hepatitis B en la infancia o adultez, un simple análisis de sangre o consultar en tu vacunatorio te permitirá iniciar o completar el esquema.'
+          }
+        }
+      },
+      {
+        id: 'q9_prep',
+        block: 'Bloque 5 · Prevención Combinada (9/10)',
+        question: '9. ¿Te interesaría conocer o evaluar el uso de la PrEP (Profilaxis Pre-Exposición) para prevenir el VIH?',
+        context: 'La PrEP es un medicamento preventivo tomado antes de una posible exposición por personas VIH negativas.',
+        feedback: {
+          yes: {
+            tone: 'safe',
+            badge: 'Herramienta de alta eficacia (>99%)',
+            title: 'La PrEP reduce en más del 99% el riesgo de adquirir VIH',
+            text: 'Consiste en tomar una pastilla diaria (o un esquema a demanda bajo supervisión médica) acompañada de controles trimestrales. Puedes solicitar evaluación de PrEP en programas de salud sexual.'
+          },
+          no: {
+            tone: 'neutral',
+            badge: 'Opciones flexibles',
+            title: 'Existen múltiples formas de prevención combinada',
+            text: 'La PrEP es una alternativa voluntaria; combinar preservativos, lubricantes adecuados y testeos periódicos sigue siendo un esquema sólido y efectivo.'
+          }
+        }
+      },
+      {
+        id: 'q10_indetectable_barreras',
+        block: 'Bloque 5 · Prevención Combinada (10/10)',
+        question: '10. ¿Conocías el principio científico I = I (Indetectable = Intransmisible) y el uso correcto de lubricantes con preservativo?',
+        context: 'La ciencia actual sobre VIH y el cuidado mecánico de los métodos de barrera eliminan mitos y previenen roturas.',
+        feedback: {
+          yes: {
+            tone: 'safe',
+            badge: 'Conocimiento actualizado',
+            title: 'Ciencia sin estigma y prevención práctica',
+            text: 'Cuando una persona con VIH toma su tratamiento y mantiene su carga viral indetectable, NO transmite el virus por vía sexual (I=I). Además, usar lubricantes a base de agua o silicona evita que el látex se rompa.'
+          },
+          no: {
+            tone: 'info',
+            badge: 'Dos datos fundamentales',
+            title: 'I = I y lubricantes seguros',
+            text: '1) I=I: Una persona con VIH en tratamiento eficaz y carga viral indetectable NO transmite el VIH sexualmente. 2) Usa siempre lubricantes a base de agua o silicona con preservativos (nunca aceites o vaselina, ya que dañan el látex).'
+          }
+        }
+      }
+    ];
+
+    // Estado de la aplicación
+    let currentIndex = 0;
+    let userAnswers = {}; // Guarda { [questionId]: 'yes' | 'no' }
+    let showingFeedback = false; // Controla si estamos viendo la pregunta o su cápsula educativa
+
+    // Referencias a elementos del DOM
+    const welcomeScreen = document.getElementById('welcome-screen');
+    const agentScreen = document.getElementById('agent-screen');
+    const cardContainer = document.getElementById('card-container');
+    const blockBadge = document.getElementById('block-badge');
+    const stepCounter = document.getElementById('step-counter');
+    const progressBar = document.getElementById('progress-bar');
+    const btnBack = document.getElementById('btn-back');
+    const btnHeaderRestart = document.getElementById('btn-header-restart');
+
+    /**
+     * Inicia el cuestionario de 10 preguntas desde la pantalla de bienvenida
+     */
+    function startAgent() {
+      currentIndex = 0;
+      userAnswers = {};
+      showingFeedback = false;
+      welcomeScreen.classList.add('hidden');
+      agentScreen.classList.remove('hidden');
+      btnHeaderRestart.classList.remove('hidden');
+      renderStep();
+    }
+
+    /**
+     * Registra la respuesta Sí/No y muestra la cápsula educativa inmediata
+     */
+    function handleAnswer(choice) {
+      const q = questionsList[currentIndex];
+      userAnswers[q.id] = choice;
+      showingFeedback = true;
+      renderStep();
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    /**
+     * Avanza a la siguiente pregunta o al resumen final personalizado
+     */
+    function nextStep() {
+      showingFeedback = false;
+      if (currentIndex < questionsList.length - 1) {
+        currentIndex++;
+        renderStep();
+      } else {
+        renderFinalSummary();
+      }
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    /**
+     * Retrocede al paso anterior (de cápsula a pregunta, o a la pregunta previa)
+     */
+    function goBack() {
+      if (showingFeedback) {
+        showingFeedback = false;
+        renderStep();
+        return;
+      }
+      if (currentIndex > 0) {
+        currentIndex--;
+        showingFeedback = false;
+        renderStep();
+      } else {
+        resetApp();
+      }
+    }
+
+    /**
+     * Reinicia toda la aplicación al aviso inicial
+     */
+    function resetApp() {
+      currentIndex = 0;
+      userAnswers = {};
+      showingFeedback = false;
+      agentScreen.classList.add('hidden');
+      btnHeaderRestart.classList.add('hidden');
+      welcomeScreen.classList.remove('hidden');
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    /**
+     * Renderiza la pregunta actual o su cápsula de retroalimentación
+     */
+    function renderStep() {
+      const total = questionsList.length;
+      const q = questionsList[currentIndex];
+      const progressPercent = Math.round(((currentIndex + (showingFeedback ? 0.5 : 0)) / total) * 100);
+
+      blockBadge.textContent = q.block;
+      stepCounter.textContent = `Pregunta ${currentIndex + 1} de ${total}`;
+      progressBar.style.width = `${Math.max(8, progressPercent)}%`;
+      btnBack.disabled = false;
+
+      if (!showingFeedback) {
+        renderQuestionView(q);
+      } else {
+        renderFeedbackView(q, userAnswers[q.id]);
+      }
+    }
+
+    /**
+     * Vista de Pregunta Sí / No
+     */
+    function renderQuestionView(q) {
+      cardContainer.innerHTML = `
+        <div class="space-y-6">
+          <div>
+            <h2 class="text-xl sm:text-2xl font-bold text-brand-deep leading-snug mb-3">
+              ${q.question}
+            </h2>
+            <p class="text-sm sm:text-base text-slate-600 leading-relaxed bg-slate-50 p-3.5 rounded-xl border border-slate-100">
+              ${q.context}
+            </p>
+          </div>
+
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-3.5 pt-2">
+            <button onclick="handleAnswer('yes')" class="group flex items-center justify-between p-4 sm:p-5 rounded-2xl border-2 border-brand-deep bg-brand-deep hover:bg-brand-mid text-white font-semibold text-lg transition-all shadow-sm cursor-pointer">
+              <span>Sí</span>
+              <span class="w-8 h-8 rounded-full bg-white/15 flex items-center justify-center group-hover:scale-105 transition-transform">
+                <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+              </span>
+            </button>
+
+            <button onclick="handleAnswer('no')" class="group flex items-center justify-between p-4 sm:p-5 rounded-2xl border-2 border-slate-300 bg-white hover:border-teal-600 hover:bg-teal-50/40 text-brand-deep font-semibold text-lg transition-all cursor-pointer">
+              <span>No</span>
+              <span class="w-8 h-8 rounded-full bg-slate-100 group-hover:bg-teal-100 text-slate-600 group-hover:text-teal-700 flex items-center justify-center transition-colors">
+                <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+              </span>
+            </button>
+          </div>
+        </div>
+      `;
+    }
+
+    /**
+     * Vista de Cápsula Educativa inmediata tras responder Sí o No
+     */
+    function renderFeedbackView(q, choice) {
+      const fb = q.feedback[choice];
+      const isLast = currentIndex === questionsList.length - 1;
+
+      const toneMap = {
+        urgent: {
+          box: 'bg-rose-50/80 border-rose-200',
+          badge: 'bg-rose-100 text-rose-800 border-rose-200',
+          title: 'text-rose-950'
+        },
+        warning: {
+          box: 'bg-amber-50/80 border-amber-200',
+          badge: 'bg-amber-100 text-amber-800 border-amber-200',
+          title: 'text-amber-950'
+        },
+        info: {
+          box: 'bg-blue-50/70 border-blue-200',
+          badge: 'bg-blue-100 text-brand-deep border-blue-200',
+          title: 'text-brand-deep'
+        },
+        safe: {
+          box: 'bg-teal-50/70 border-teal-200',
+          badge: 'bg-teal-100 text-teal-800 border-teal-200',
+          title: 'text-teal-950'
+        },
+        neutral: {
+          box: 'bg-slate-50 border-slate-200',
+          badge: 'bg-slate-200/80 text-slate-700 border-slate-300',
+          title: 'text-brand-deep'
+        }
+      };
+
+      const style = toneMap[fb.tone] || toneMap.info;
+      const choiceLabel = choice === 'yes' ? 'Sí' : 'No';
+
+      // Si es la alerta de 72h (Pregunta 1 = Sí), ofrecer también ir directo al resumen urgente o seguir
+      const urgentExtraButton = (q.id === 'q1_pep_72h' && choice === 'yes') ? `
+        <button onclick="renderFinalSummary()" class="w-full py-3 px-5 rounded-2xl border-2 border-rose-600 text-rose-700 hover:bg-rose-50 font-semibold text-sm sm:text-base transition-colors cursor-pointer">
+          Ver resumen de urgencia PEP ahora
+        </button>
+      ` : '';
+
+      cardContainer.innerHTML = `
+        <div class="space-y-6">
+          <div class="flex items-center justify-between gap-2 text-xs text-slate-500">
+            <span>Tu respuesta: <strong class="text-brand-deep uppercase">${choiceLabel}</strong></span>
+            <span>Cápsula educativa</span>
+          </div>
+
+          <div class="p-5 sm:p-6 rounded-2xl border ${style.box} space-y-3">
+            <span class="inline-block px-3 py-1 rounded-full text-xs font-semibold border ${style.badge}">
+              ${fb.badge}
+            </span>
+            <h3 class="text-lg sm:text-xl font-bold ${style.title} leading-snug">
+              ${fb.title}
+            </h3>
+            <p class="text-sm sm:text-base text-slate-700 leading-relaxed">
+              ${fb.text}
+            </p>
+          </div>
+
+          <div class="space-y-3 pt-1">
+            <button onclick="nextStep()" class="w-full py-4 px-6 rounded-2xl bg-brand-deep hover:bg-brand-mid text-white font-semibold text-base transition-all flex items-center justify-center gap-2 shadow-sm cursor-pointer">
+              <span>${isLast ? 'Ver mi resumen personalizado' : 'Siguiente pregunta'}</span>
+              <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+            </button>
+            ${urgentExtraButton}
+          </div>
+        </div>
+      `;
+    }
+
+    /**
+     * Genera el Resumen Final Personalizado basado exactamente en las respuestas del usuario
+     */
+    function renderFinalSummary() {
+      blockBadge.textContent = 'Orientación Completada · Plan Personalizado';
+      stepCounter.textContent = 'Resumen Final';
+      progressBar.style.width = '100%';
+
+      const recommendations = [];
+
+      // 1. Urgencia PEP (<72h)
+      if (userAnswers.q1_pep_72h === 'yes') {
+        recommendations.push({
+          priority: 'high',
+          tag: 'URGENTE (< 72 HORAS)',
+          title: 'Solicita Profilaxis Post-Exposición (PEP) hoy mismo',
+          desc: 'Acude a un servicio de urgencias médicas antes de que pasen 72 horas desde la exposición sin preservativo para evaluar el inicio gratuito de antirretrovirales preventivos.'
+        });
+      }
+
+      // 2. Síntomas activos (Q2 o Q3)
+      if (userAnswers.q2_sintomas_urinarios === 'yes' || userAnswers.q3_sintomas_lesiones === 'yes') {
+        recommendations.push({
+          priority: 'medium',
+          tag: 'CONSULTA CLÍNICA',
+          title: 'Evaluación médica por síntomas reportados (sin automedicarse)',
+          desc: 'Agenda consulta en un centro de salud para revisar las molestias o lesiones. Evita antibióticos o cremas sin receta y mantén abstinencia sexual hasta completar el tratamiento indicado.'
+        });
+      }
+
+      // 3. Pruebas diagnósticas y período ventana (Q4 o Q5)
+      if (userAnswers.q4_exposicion_3m === 'yes' || userAnswers.q5_test_12m === 'no') {
+        recommendations.push({
+          priority: 'info',
+          tag: 'CHEQUEO PREVENTIVO',
+          title: 'Realízate un tamizaje confidencial de VIH y Sífilis',
+          desc: 'Se recomienda solicitar pruebas rápidas de VIH y Sífilis (y evaluar clamidia/gonorrea). Si la exposición fue muy reciente, respeta el período ventana de 3 a 6 semanas para pruebas de 4ª generación.'
+        });
+      }
+
+      // 4. Vacunación VPH y Hepatitis (Q7 o Q8)
+      if (userAnswers.q7_vacuna_vph === 'no' || userAnswers.q8_vacuna_hepatitis === 'no') {
+        const missingVaccines = [];
+        if (userAnswers.q7_vacuna_vph === 'no') missingVaccines.push('VPH');
+        if (userAnswers.q8_vacuna_hepatitis === 'no') missingVaccines.push('Hepatitis B');
+        recommendations.push({
+          priority: 'info',
+          tag: 'INMUNIZACIÓN',
+          title: `Consulta por vacunación contra ${missingVaccines.join(' y ')}`,
+          desc: 'Acércate a un vacunatorio o centro de atención primaria para revisar tu carné e iniciar o completar tus esquemas preventivos disponibles.'
+        });
+      }
+
+      // 5. PrEP y Prevención Combinada (Q9 o general)
+      if (userAnswers.q9_prep === 'yes') {
+        recommendations.push({
+          priority: 'safe',
+          tag: 'PREVENCIÓN COMBINADA',
+          title: 'Solicita orientación sobre ingreso a PrEP',
+          desc: 'Pregunta en un programa de salud sexual por la Profilaxis Pre-Exposición (PrEP), una herramienta con más del 99% de eficacia para prevenir el VIH acompañada de controles periódicos.'
+        });
+      }
+
+      // Recomendación base si todo estuvo en orden o como cierre integral
+      recommendations.push({
+        priority: 'safe',
+        tag: 'HÁBITOS DE CUIDADO',
+        title: 'Mantén prevención combinada e información libre de estigma',
+        desc: 'Combina el uso correcto de preservativos con lubricantes a base de agua o silicona, chequeos anuales y recuerda el principio científico I = I (Indetectable = Intransmisible).'
+      });
+
+      const badgeStyles = {
+        high: 'bg-rose-100 text-rose-800 border-rose-200',
+        medium: 'bg-amber-100 text-amber-800 border-amber-200',
+        info: 'bg-blue-100 text-brand-deep border-blue-200',
+        safe: 'bg-teal-100 text-teal-800 border-teal-200'
+      };
+
+      const borderStyles = {
+        high: 'border-l-4 border-l-rose-500',
+        medium: 'border-l-4 border-l-amber-500',
+        info: 'border-l-4 border-l-brand-deep',
+        safe: 'border-l-4 border-l-teal-600'
+      };
+
+      const cardsHtml = recommendations.map(rec => `
+        <div class="p-4 sm:p-5 rounded-2xl bg-slate-50 border border-slate-200/90 ${borderStyles[rec.priority]}">
+          <span class="inline-block px-2.5 py-0.5 rounded-md text-[11px] font-bold tracking-wider border ${badgeStyles[rec.priority]} mb-2">
+            ${rec.tag}
+          </span>
+          <h4 class="font-bold text-brand-deep text-base mb-1">${rec.title}</h4>
+          <p class="text-sm text-slate-600 leading-relaxed">${rec.desc}</p>
+        </div>
+      `).join('');
+
+      // Guardar texto plano limpio para copiar al portapapeles
+      window.currentSummaryPlainText = [
+        'RESUMEN DE ORIENTACIÓN EN SALUD SEXUAL (ITS Y VIH)',
+        'Nota: Documento informativo y anónimo (no constituye diagnóstico médico).',
+        '--------------------------------------------------',
+        ...recommendations.map((r, i) => `${i + 1}. [${r.tag}] ${r.title}: ${r.desc}`),
+        '--------------------------------------------------',
+        'Recomendación general: Ante dudas o síntomas, acude a tu centro de salud más cercano.'
+      ].join('\n\n');
+
+      cardContainer.innerHTML = `
+        <div class="space-y-6">
+          <div>
+            <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold bg-teal-50 text-teal-800 border border-teal-200 mb-3">
+              ✓ Cuestionario de 10 pasos completado
+            </span>
+            <h2 class="text-2xl font-bold text-brand-deep leading-snug mb-2">
+              Tu Resumen Personalizado de Orientación
+            </h2>
+            <p class="text-sm sm:text-base text-slate-600 leading-relaxed">
+              Basado en tus respuestas anónimas, estas son las acciones y recordatorios más relevantes para tu cuidado:
+            </p>
+          </div>
+
+          <div class="space-y-3.5">
+            ${cardsHtml}
+          </div>
+
+          <!-- Notificación visual de copiado -->
+          <div id="copy-toast" class="hidden p-3 rounded-xl bg-teal-50 border border-teal-200 text-teal-800 text-xs sm:text-sm font-medium text-center">
+            ✓ Resumen copiado al portapapeles (sin datos personales).
+          </div>
+
+          <div class="pt-3 border-t border-slate-100 grid grid-cols-1 sm:grid-cols-2 gap-3">
+            <button onclick="copySummaryToClipboard()" class="py-3.5 px-4 rounded-2xl bg-brand-deep hover:bg-brand-mid text-white font-semibold text-sm transition-colors flex items-center justify-center gap-2 cursor-pointer">
+              <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+              <span>Copiar resumen</span>
+            </button>
+            <button onclick="resetApp()" class="py-3.5 px-4 rounded-2xl bg-slate-100 hover:bg-slate-200/80 text-brand-deep font-semibold text-sm transition-colors flex items-center justify-center gap-2 cursor-pointer">
+              <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="1 4 1 10 7 10"/><path d="M3.51 15a9 9 0 1 0 2.13-9.36L1 10"/></svg>
+              <span>Reiniciar cuestionario</span>
+            </button>
+          </div>
+        </div>
+      `;
+    }
+
+    /**
+     * Copia el resumen anónimo al portapapeles de forma segura (compatible con iframes)
+     */
+    function copySummaryToClipboard() {
+      const text = window.currentSummaryPlainText || '';
+      const textarea = document.createElement('textarea');
+      textarea.value = text;
+      textarea.style.position = 'fixed';
+      textarea.style.opacity = '0';
+      document.body.appendChild(textarea);
+      textarea.select();
+      try {
+        document.execCommand('copy');
+        const toast = document.getElementById('copy-toast');
+        if (toast) {
+          toast.classList.remove('hidden');
+          setTimeout(() => toast.classList.add('hidden'), 3500);
+        }
+      } catch (err) {
+        console.error('No se pudo copiar el resumen:', err);
+      }
+      document.body.removeChild(textarea);
+    }
+  </script>
+</body>
+</html>
